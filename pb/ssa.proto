@@ -1,0 +1,225 @@
+syntax = "proto3";
+package pb;
+
+import "type.proto";
+
+message Package {
+  string name = 1;
+  repeated Member members = 4;
+}
+
+message Node {
+  string name = 1;
+  TypeInfo type = 1;
+  uint32 pos = 1;
+
+  ValueInfo value_info = 1;
+  InstrInfo instr_info = 1;
+  MemberInfo member_info = 1;
+
+  message ValueInfo {
+  }
+
+  message InstrInfo {
+  }
+  
+  message MemberInfo {
+    string doc = 1;
+    string file = 1;
+  }
+}
+
+// Abstractions
+
+message Value {
+  oneof value {
+    // TODO
+  }
+}
+
+message Instr {
+  oneof instr {
+    // TODO
+  }
+}
+
+message Member {
+  oneof member {
+    // TODO
+  }
+}
+
+// Pieces
+
+message Alloc {
+  Node node = 1;
+  bool heap = 2;
+}
+
+message BasicBlock {
+  Node node = 1;
+  repeated Instr instrs = 2;
+}
+
+message BinOp {
+  Node node = 1;
+  string op = 2;
+  Value x = 3;
+  Value y = 4;
+}
+
+message Builtin {
+  Node node = 1;
+}
+
+message Call {
+  Node node = 1;
+  CallCommon common = 2;
+}
+
+message CallCommon {
+  Value value = 1;
+  TypeInfo method = 2;
+  repeated Value args = 3;
+}
+
+message ChangeInterface {
+  Node node = 1;
+  Value x = 2;
+}
+
+message ChangeType {
+  Node node = 1;
+  Value x = 2;
+}
+
+message Const {
+  Node node = 1;
+  ConstantValue value = 2;
+}
+
+message Convert {
+  Node node = 1;
+  Value x = 2;
+}
+
+// TODO: skipped DebugRef?
+
+message Defer {
+  Node node = 1;
+  CallCommon common = 2;
+}
+
+message Extract {
+  Node node = 1;
+  Value tuple = 2;
+  uint32 index = 3;
+}
+
+message Field {
+  Node node = 1;
+  Value x = 2;
+  uint32 field = 3;
+}
+
+message FieldAddr {
+  Node node = 1;
+  Value x = 2;
+  uint32 field = 3;
+}
+
+message FreeVar {
+  Node node = 1;
+}
+
+message Function {
+  Node node = 1;
+  bool synthetic = 2;
+  repeated FreeVar free_vars = 3;
+  repeated Alloc locals = 4;
+  repeated BasicBlock blocks = 5;
+  BasicBlock recover = 6;
+}
+
+message Global {
+  Node node = 1;
+}
+
+message Go {
+  Node node = 1;
+  CallCommon common = 2;
+}
+
+message If {
+  Node node = 1;
+  Value cond = 2;
+}
+
+message Index {
+  Node node = 1;
+  Value x = 2;
+  Value index = 3;
+}
+
+message IndexAddr {
+  Node node = 1;
+  Value x = 2;
+  Value index = 3;
+}
+
+message Jump {
+  Node node = 1;
+}
+
+message Lookup {
+  Node node = 1;
+  Value x = 2;
+  Value index = 3;
+  bool comma_ok = 4;
+}
+
+message MakeChan {
+  Node node = 1;
+  Value size = 2;
+}
+
+message MakeClosure {
+  Node node = 1;
+  Value fn = 2;
+  repeated Value bindings = 3;
+}
+
+message MakeInterface {
+  Node node = 1;
+  Value x = 2;
+}
+
+message MakeMap {
+  Node node = 1;
+  Value reserve = 2;
+}
+
+message MakeSlice {
+  Node node = 1;
+  Value len = 2;
+  Value cap = 3;
+}
+
+message MapUpdate {
+  Node node = 1;
+  Value map = 2;
+  Value key = 3;
+  Value value = 4;
+}
+
+message NamedConst {
+  Node node = 1;
+  Const value = 2;
+}
+
+message Next {
+  Node node = 1;
+  Value iter = 2;
+  bool is_string = 3;
+}
+
