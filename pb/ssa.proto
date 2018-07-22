@@ -33,19 +33,85 @@ message Node {
 
 message Value {
   oneof value {
-    // TODO
+    Alloc alloc = 1;
+    BinOp bin_op = 2;
+    Builtin builtin = 3;
+    Call call = 4;
+    ChangeInterface change_interface = 5;
+    ChangeType change_type = 6;
+    Const const = 7;
+    Convert convert = 8;
+    Extract extract = 9;
+    Field field = 10;
+    FieldAddr field_addr = 11;
+    FreeVar free_var = 12;
+    Function function = 13;
+    Global global = 14;
+    Index index = 15;
+    IndexAddr index_addr = 16;
+    Lookup lookup = 17;
+    MakeChan make_chan = 18;
+    MakeClosure make_closure = 19;
+    MakeInterface make_interface = 20;
+    MakeMap make_map = 21;
+    MakeSlice make_slice = 22;
+    Next next = 23;
+    Parameter parameter = 24;
+    Phi phi = 25;
+    Range range = 26;
+    Select select = 27;
+    Slice slice = 28;
+    TypeAssert type_assert = 29;
+    UnOp un_op = 30;
   }
 }
 
 message Instr {
   oneof instr {
-    // TODO
+    Alloc alloc = 1;
+    BinOp bin_op = 2;
+    Call call = 3;
+    ChangeInterface change_interface = 4;
+    ChangeType change_type = 5;
+    Convert convert = 6;
+    DebugRef debug_ref = 7;
+    Defer defer = 8;
+    Extract extract = 9;
+    Field field = 10;
+    FieldAddr field_addr = 11;
+    Go go = 12;
+    If if = 13;
+    Index index = 14;
+    IndexAddr index_addr = 15;
+    Jump jump = 16;
+    Lookup lookup = 17;
+    MakeChan make_chan = 18;
+    MakeClosure make_closure = 19;
+    MakeInterface make_interface = 20;
+    MakeMap make_map = 21;
+    MakeSlice make_slice = 22;
+    MapUpdate map_update = 23;
+    Next next = 24;
+    Panic panic = 25;
+    Phi phi = 26;
+    Range range = 27;
+    Return return = 28;
+    RunDefers run_defers = 29;
+    Select select = 30;
+    Send send = 31;
+    Slice slice = 32;
+    Store store = 33;
+    TypeAssert type_assert = 34;
+    UnOp un_op = 35;
   }
 }
 
 message Member {
   oneof member {
-    // TODO
+    Function function = 1;
+    Global global = 2;
+    NamedConst named_const = 3;
+    Type type = 4;
   }
 }
 
@@ -135,10 +201,11 @@ message FreeVar {
 message Function {
   Node node = 1;
   bool synthetic = 2;
-  repeated FreeVar free_vars = 3;
-  repeated Alloc locals = 4;
-  repeated BasicBlock blocks = 5;
-  BasicBlock recover = 6;
+  repeated Parameter params = 3;
+  repeated FreeVar free_vars = 4;
+  repeated Alloc locals = 5;
+  repeated BasicBlock blocks = 6;
+  BasicBlock recover = 7;
 }
 
 message Global {
@@ -223,3 +290,80 @@ message Next {
   bool is_string = 3;
 }
 
+message Panic {
+  Node node = 1;
+  Value x = 2;
+}
+
+message Parameter {
+  Node node = 1;
+}
+
+message Phi {
+  Node node = 1;
+  repeated Value edges = 2;
+}
+
+message Range {
+  Node node = 1;
+  Value x = 2;
+}
+
+message Return {
+  Node node = 1;
+  repeated Value results = 2;
+}
+
+message RunDefers {
+  Node node = 1;
+}
+
+message Select {
+  Node node = 1;
+  repeated State states = 2;
+  bool blocking = 2;
+
+  message State {
+    bool send = 1;
+    Value chan = 2;
+    Value send = 3;
+    uint32 pos = 4;
+  }
+}
+
+message Send {
+  Node node = 1;
+  Value chan = 2;
+  Value x = 3;
+}
+
+message Slice {
+  Node node = 1;
+  Value x = 2;
+  Value low = 3;
+  Value high = 4;
+  Value max = 5;
+}
+
+message Store {
+  Node node = 1;
+  Value val = 1;
+}
+
+message Type {
+  Node node = 1;
+}
+
+message TypeAssert {
+  Node node = 1;
+  Value x = 2;
+  TypeInfo asserted_type = 3;
+  bool comma_ok = 4;
+}
+
+message UnOp {
+  Node node = 1;
+  string op = 2;
+  Value x = 3;
+  bool comma_ok = 4;
+}
